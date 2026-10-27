@@ -23,14 +23,14 @@ scripts/, preview/          tests, asset generation, static preview entry (not d
 The deck uses **Playfair Display** and **Arial Nova Light**. Playfair ships with the site. Arial Nova is a commercial Monotype font, so it can't be bundled without a web licence; the CSS asks for it first (it shows on machines that have it) and falls back to Inter Tight Light. To use the real thing everywhere, buy the Arial Nova web licence, put the `.woff2` files in `public/fonts/` and add an `@font-face` for "Arial Nova" at the top of `app/globals.css`.
 
 ### Photographs
-All three photos are free under the [Unsplash License](https://unsplash.com/license) and load from Unsplash's CDN (sized per device):
+All three photos are free under the [Unsplash License](https://unsplash.com/license) and are self-hosted in `public/media/` as WebP at two widths each:
 | Where | Photo | Photographer |
 |---|---|---|
 | Hero | [Blue Ridge, mist in the valleys](https://unsplash.com/photos/U5Rdrv5ZOt8) | Mark Olsen |
 | About | [Lavender field, mountain behind](https://unsplash.com/photos/0d7ckLu3_t4) | Thomas Despeyroux |
 | Waitlist | [Sunrise through morning mist](https://unsplash.com/photos/9pu-4NtgSjg) | Philipp |
 
-To self-host (recommended before launch, and needed to swap in client photography): save the files to `public/media/` and set `local: "/media/<file>"` on each entry in `lib/media.ts`.
+To swap in other photography, add WebP files to `public/media/` and update the `local` renditions in `lib/media.ts`. The hero file supplied was 1548 px wide; a higher-resolution original from Unsplash will look sharper on large retina screens.
 
 ## Local development
 

@@ -13,8 +13,8 @@ export default function Photo({
   priority?: boolean;
 }) {
   return (
-    // Unsplash's CDN already resizes and re-encodes, so a plain <img> with
-    // srcset is the right tool here (no double optimisation).
+    // Photos are pre-sized WebP renditions (or Unsplash's resizing CDN), so a
+    // plain <img> with srcset is the right tool (no double optimisation).
     // eslint-disable-next-line @next/next/no-img-element
     <img
       className={className}
