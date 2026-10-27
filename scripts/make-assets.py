@@ -30,7 +30,7 @@ with sync_playwright() as p:
     og = b.new_page(viewport={"width": 1200, "height": 630})
     og.goto(BASE + "/", wait_until="networkidle")
     time.sleep(10)
-    og.add_style_tag(content=".hero__foot,.hero__scroll,.thumb,.sound{display:none!important}")
+    og.add_style_tag(content=".hero__scroll,.hero__hint,.sound{display:none!important}")
     time.sleep(0.5)
     og.screenshot(path="public/og.jpg", type="jpeg", quality=86)
     b.close()

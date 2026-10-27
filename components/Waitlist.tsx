@@ -1,24 +1,31 @@
 import WaitlistForm from "./WaitlistForm";
 
+const EMAIL = "info@svalabs.in";
+
 export default function Waitlist() {
   return (
-    <section id="join" className="paper waitlist" aria-labelledby="join-title">
-      <div className="rule-row">
-        <span className="mono">03 — The waitlist</span>
-        <span className="mono">Coming soon</span>
-      </div>
+    <section id="join" className="waitlist" aria-labelledby="join-title">
       <div className="waitlist__grid">
         <div className="waitlist__intro">
-          <h2 id="join-title" className="display reveal">
-            Be first <em>to return.</em>
+          <p className="mono">The waitlist</p>
+          <h2 id="join-title" className="waitlist__title reveal">
+            Be the first <em>to return.</em>
           </h2>
           <p className="waitlist__lede reveal" style={{ ["--d" as string]: "100ms" }}>
-            svā labs is still in the making. Leave your name and email, and we’ll write when the first rituals are
-            ready — nothing more.
+            Leave your name and email, and we’ll write when the first svā rituals are ready. Nothing more.
           </p>
         </div>
         <WaitlistForm turnstileSiteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""} />
       </div>
+
+      <footer className="foot mono">
+        <span className="foot__mark" aria-label="svā labs">
+          svā
+        </span>
+        <span>© {new Date().getFullYear()} svā labs</span>
+        <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+        <a href="/privacy">Privacy policy</a>
+      </footer>
     </section>
   );
 }

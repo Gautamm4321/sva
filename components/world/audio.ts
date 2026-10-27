@@ -1,11 +1,11 @@
 "use client";
 
-import { world, onExhale, onChime } from "./store";
+import { world, onChime } from "./store";
 
 /**
  * Ambient sound, synthesized in the browser — no audio files, no licensing.
  *  · a low, slowly breathing drone (two detuned tones through a lowpass)
- *  · "air": filtered noise that opens as you inhale
+ *  · "air": filtered noise that lifts with each breeze
  *  · soft bell tones when strands are swept — the curtain is a wind chime,
  *    pitched left (low) to right (high) on a D minor pentatonic scale
  * Starts only on an explicit user action; always fades in and out.
@@ -128,9 +128,10 @@ class AmbientAudio {
   private tick = () => {
     if (!this.ctx || !this.airFilter || !this.airGain) return;
     const now = this.ctx.currentTime;
-    const b = world.breath;
-    this.airFilter.frequency.setTargetAtTime(380 + b * 1400, now, 0.25);
-    this.airGain.gain.setTargetAtTime(0.035 + b * 0.09, now, 0.25);
+    // Air rises a little with each breeze through the strands.
+    const b = Math.min(1, world.gust);
+    this.airFilter.frequency.setTargetAtTime(420 + b * 1200, now, 0.3);
+    this.airGain.gain.setTargetAtTime(0.04 + b * 0.08, now, 0.3);
     this.raf = requestAnimationFrame(this.tick);
   };
 
@@ -145,15 +146,12 @@ class AmbientAudio {
     const scale = [293.66, 349.23, 392.0, 440.0, 523.25, 587.33, 698.46, 783.99]; // D F G A C D F G
     let lastChime = 0;
     this.unsubs.push(
-      onExhale((s) => {
-        [0, 2, 4].forEach((n, i) => window.setTimeout(() => this.bell(scale[n] / 2, 0.1 + s * 0.08), i * 140));
-      }),
-      onChime((piece, strand, s) => {
+      onChime((strand, x, s) => {
         const now = performance.now();
         if (now - lastChime < 70) return; // never a clatter
         lastChime = now;
-        const i = Math.min(scale.length - 1, Math.floor(strand * scale.length));
-        this.bell(scale[i] * (piece % 2 ? 1 : 0.5), 0.05 + s * 0.08);
+        const i = Math.min(scale.length - 1, Math.max(0, Math.floor(x * scale.length)));
+        this.bell(scale[i] * (strand % 3 === 0 ? 0.5 : 1), 0.05 + s * 0.08);
       }),
     );
     cancelAnimationFrame(this.raf);

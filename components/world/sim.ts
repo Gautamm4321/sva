@@ -1,29 +1,13 @@
-import { world, emitExhale } from "./store";
+import { world } from "./store";
 
-/**
- * Page-level tick (runs on the DOM rAF loop, independent of WebGL), so the
- * breath logic and pointer smoothing behave the same with or without a canvas.
- */
-const damp = (a: number, b: number, lambda: number, dt: number) => a + (b - a) * (1 - Math.exp(-lambda * dt));
+let lastScroll = 0;
 
-let wasHolding = false;
-
+/** Page-level tick: advances the clock and turns quick scrolls into a breeze. */
 export function stepWorld(rawDt: number) {
   const dt = Math.min(rawDt, 0.05);
   world.time += dt;
-
-  if (world.holding) {
-    world.breath = damp(world.breath, 1, 0.8, dt); // ~4 s to a full breath
-  } else {
-    if (wasHolding && world.breath > 0.15) {
-      world.gust = Math.max(world.gust, 0.4 + world.breath * 0.9);
-      emitExhale(world.breath);
-    }
-    world.breath = damp(world.breath, 0, 1.6, dt);
-  }
-  wasHolding = world.holding;
-
-  const p = world.pointer;
-  p.vx = damp(p.vx, 0, 6, dt);
-  p.vy = damp(p.vy, 0, 6, dt);
+  const y = window.scrollY;
+  const v = Math.abs(y - lastScroll) / Math.max(dt, 1e-3);
+  lastScroll = y;
+  if (!world.reducedMotion && v > 400) world.gust = Math.min(0.9, Math.max(world.gust, v / 4000));
 }
