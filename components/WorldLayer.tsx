@@ -112,7 +112,12 @@ export default function WorldLayer() {
 
   return (
     <div ref={ref} className="scene" data-ready={ready || mode === "fallback" ? "true" : "false"} aria-hidden>
-      <div className="scene-paint" />
+      {/* Drifting cloud layers: shown until WebGL is ready, and as the fallback. */}
+      <div className="scene-clouds">
+        <i />
+        <i />
+        <i />
+      </div>
       {mode === "webgl" && <World onReady={() => window.setTimeout(() => setReady(true), 150)} />}
     </div>
   );

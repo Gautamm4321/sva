@@ -1,22 +1,18 @@
 # svā labs — waitlist page · design brief
 
-## References
-| Ref | Used for |
-|---|---|
-| Brand PDF | Identity, palette, all copy. The product photos in the deck are samples, so no products are shown. |
-| zhai-farms-site | Nature-first hero, drifting clouds/mist, large serif type, calm paper sections |
-| Instagram reel | The *feel* of the 3D: things hanging in space that sway and part when you move through them, soft depth |
+## Brand (from the deck)
+- Fonts: **Playfair Display** (wordmark, headings) and **Arial Nova Light** (text, labels). Playfair is self-hosted (OFL). Arial Nova is a licensed Monotype face — used where installed, with Inter Tight Light as the web stand-in until a webfont licence is bought.
+- Colours: paper `#F1ECE6`, text `#403E3E`, taupe `#C6BAAB` (wordmark grey-beige), cocoa `#24130C` and gold `#DCAE77` (roundel).
+- Copy: only lines from the deck. The deck's product photos are samples, so no products are shown.
 
-## Concept
-Dawn over misty hills, seen through a canopy of hanging dried botanicals — lavender, chamomile, vetiver, leaves, small gold beads (the CALM notes from the deck). Move the cursor (or swipe) through them and they part and swing; with sound on, they chime. Scent = botanicals, sound = chimes, nature = the landscape.
+## References
+- **Zhai Farms**: full-bleed nature photograph as the hero, drifting cloud/mist over it, big serif title, calm paper sections.
+- **Reel**: the feel of things floating in real depth that react to the cursor.
 
 ## Sections
-1. **Hero** — landscape shader (sky, low sun, cloud decks, five ridges with valley mist) + 3D strands + mist in front; dissolves into paper through low cloud. Copy: "Return to self." + one line + Join the waitlist.
-2. **svā means self** — the deck's About text, the three moments, one line on what's in the making (text only).
-3. **Waitlist** — name, email, consent; small footer (©, email, privacy).
+1. **Hero** — real photograph (misty valleys at dawn), slow settle + breathing zoom, WebGL mist drifting through the valleys, chamomile petals and lavender buds floating in depth that part around the cursor. "Return to self." + one line + Join the waitlist.
+2. **About** — "svā means self." with the deck's text and the three moments, beside a lavender-field photograph.
+3. **Waitlist** — a dawn photograph band fading into paper, then the form; small footer with photo credits.
 
-## Palette / type
-Paper `#EDE6DC`, ink `#2B211B`, cocoa `#24130C`, gold `#DCAE77`, amber `#8A4A1A`; landscape in sage/olive/lilac haze. Cormorant Garamond · DM Mono · Inter Tight (self-hosted).
-
-## Performance
-Ridges are drawn nearest-first with early exits; clouds only in the upper sky; strands ~78 desktop / 54 mobile / 38 low-end, one line batch + one sprite batch; DPR capped and stepped down if frames drop; canvas idles when the hero is off screen; CSS-painted fallback without WebGL; reduced motion stills the scene.
+## Photography
+Free Unsplash License (commercial use, no attribution required — credited anyway). Served from Unsplash's CDN; see `lib/media.ts` to self-host.

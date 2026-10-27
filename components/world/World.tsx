@@ -33,9 +33,12 @@ export default function World({ onReady }: { onReady?: () => void }) {
       dpr={dpr}
       flat
       frameloop={active ? "always" : "never"}
-      gl={{ antialias: tier !== "low", alpha: false, powerPreference: "high-performance", stencil: false }}
+      gl={{ antialias: tier !== "low", alpha: true, powerPreference: "high-performance", stencil: false }}
       camera={{ fov: FOV, near: 0.1, far: 40, position: [0, 0, CAM_Z] }}
-      onCreated={() => onReady?.()}
+      onCreated={({ gl }) => {
+        gl.setClearColor(0x000000, 0); // transparent: the photograph shows through
+        onReady?.();
+      }}
     >
       <Scene
         tier={tier}

@@ -1,10 +1,15 @@
 import WaitlistForm from "./WaitlistForm";
+import Photo from "./Photo";
+import { PHOTOS } from "@/lib/media";
 
 const EMAIL = "info@svalabs.in";
 
 export default function Waitlist() {
   return (
     <section id="join" className="waitlist" aria-labelledby="join-title">
+      <div className="waitlist__media" aria-hidden>
+        <Photo photo={PHOTOS.dawn} className="waitlist__photo" />
+      </div>
       <div className="waitlist__grid">
         <div className="waitlist__intro">
           <p className="mono">The waitlist</p>
@@ -25,6 +30,17 @@ export default function Waitlist() {
         <span>© {new Date().getFullYear()} svā labs</span>
         <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
         <a href="/privacy">Privacy policy</a>
+        <span className="foot__credit">
+          Photographs: {[PHOTOS.hero, PHOTOS.lavender, PHOTOS.dawn].map((p, i) => (
+            <span key={p.id}>
+              {i ? ", " : ""}
+              <a href={p.page} target="_blank" rel="noreferrer">
+                {p.credit}
+              </a>
+            </span>
+          ))}{" "}
+          / Unsplash
+        </span>
       </footer>
     </section>
   );

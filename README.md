@@ -6,35 +6,31 @@ Creative brief: [`DESIGN.md`](./DESIGN.md).
 
 ## What's here
 
-Three sections: **hero** (painted dawn landscape with drifting cloud and mist, and a 3D canopy of hanging botanicals you can sweep through), **svā means self** (brand story in the deck's words), **waitlist** (form + small footer).
+Three sections: **hero** (real photograph, drifting mist, 3D petals that part around the cursor), **about** ("svā means self." + lavender photograph), **waitlist** (form + footer).
 
 ```
-app/
-  page.tsx                  hero → about → waitlist
-  privacy/page.tsx          privacy policy (review with counsel before launch)
-  api/waitlist/route.ts     POST endpoint (Node runtime)
-  globals.css               all styles + self-hosted @font-face
-components/
-  Hero, Philosophy (about), Waitlist(+Form), SiteHeader, SoundToggle, Reveal
-  WorldLayer.tsx            WebGL detection, lazy-load, pointer/scroll → scene, CSS fallback
-  world/
-    World.tsx               <Canvas>, device tiering, pause when off-screen
-    Scene.tsx               landscape + mist passes, strands, camera
-    shaders.ts              landscape, mist and botanical sprite shaders
-    strands.ts              verlet strand physics (CPU)
-    botanicals.ts           canvas-drawn lavender, chamomile, leaves, vetiver, beads
-    audio.ts                synthesized ambience + chimes (Web Audio, no files)
-lib/
-  waitlist/validate.ts      shared client/server validation
-  waitlist/store.ts         Supabase REST insert (server only)
-  waitlist/protect.ts       rate limit, Turnstile, origin check, IP hashing
+app/                        page, privacy, /api/waitlist, globals.css
+components/                 Hero, Philosophy (about), Waitlist(+Form), Photo, SiteHeader, SoundToggle
+components/world/           WebGL layer over the hero photo: mist + petals (Scene.tsx), canvas setup, sound
+lib/media.ts                the photographs (Unsplash IDs, credits, optional self-hosted paths)
+lib/waitlist/               validation, Supabase insert, rate limit / bot protection
 supabase/migrations/        waitlist table + RLS
-scripts/                    tests + asset generation (not deployed)
-preview/                    static preview bundle entry (demo-mode form; not deployed)
-public/fonts/               Cormorant Garamond, Inter Tight, DM Mono (OFL — licences included)
+public/fonts/               Playfair Display + Inter Tight (OFL)
+scripts/, preview/          tests, asset generation, static preview entry (not deployed)
 ```
 
-No product renders, 3D model files, photos or stock assets: the landscape, botanicals and sound are generated in code.
+### Fonts
+The deck uses **Playfair Display** and **Arial Nova Light**. Playfair ships with the site. Arial Nova is a commercial Monotype font, so it can't be bundled without a web licence; the CSS asks for it first (it shows on machines that have it) and falls back to Inter Tight Light. To use the real thing everywhere, buy the Arial Nova web licence, put the `.woff2` files in `public/fonts/` and add an `@font-face` for "Arial Nova" at the top of `app/globals.css`.
+
+### Photographs
+All three photos are free under the [Unsplash License](https://unsplash.com/license) and load from Unsplash's CDN (sized per device):
+| Where | Photo | Photographer |
+|---|---|---|
+| Hero | [Blue Ridge, mist in the valleys](https://unsplash.com/photos/U5Rdrv5ZOt8) | Mark Olsen |
+| About | [Lavender field, mountain behind](https://unsplash.com/photos/0d7ckLu3_t4) | Thomas Despeyroux |
+| Waitlist | [Sunrise through morning mist](https://unsplash.com/photos/9pu-4NtgSjg) | Philipp |
+
+To self-host (recommended before launch, and needed to swap in client photography): save the files to `public/media/` and set `local: "/media/<file>"` on each entry in `lib/media.ts`.
 
 ## Local development
 
