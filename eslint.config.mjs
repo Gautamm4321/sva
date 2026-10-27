@@ -10,7 +10,7 @@ const config = [
       "react-hooks/immutability": "off",
     },
   },
-  { ignores: [".next/**", "node_modules/**", "scripts/**", "next-env.d.ts"] },
+  { ignores: [".next/**", "node_modules/**", "scripts/**", "preview/**", "next-env.d.ts"] },
 ];
 
 export default config;
