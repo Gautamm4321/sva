@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { validate } from "@/lib/waitlist/validate";
 import { addSubscriber, StoreUnavailableError } from "@/lib/waitlist/store";
+import { notifyEnabled, notifySignup } from "@/lib/waitlist/notify";
 import { clientIp, hashIp, rateLimit, sameOrigin, turnstileEnabled, verifyTurnstile } from "@/lib/waitlist/protect";
 
 export const runtime = "nodejs";
@@ -60,19 +61,40 @@ export async function POST(req: Request) {
     }
   }
 
+  // 1) Store in Supabase (if configured).
+  let stored: "created" | "exists" | "skipped" | "failed" = "skipped";
   try {
-    const result = await addSubscriber(value);
-    return json(result === "created" ? 201 : 200, { ok: true, status: result === "created" ? "joined" : "already" });
+    stored = await addSubscriber(value);
   } catch (err) {
-    if (err instanceof StoreUnavailableError) {
-      console.error("[waitlist] storage not configured (SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY)");
-      return json(503, { ok: false, message: "The waitlist isn’t open just yet. Please try again soon." });
+    if (!(err instanceof StoreUnavailableError)) {
+      stored = "failed";
+      // Log the failure class only — never the address or upstream body.
+      const domain = value.email.split("@")[1] ?? "?";
+      console.error(`[waitlist] insert failed (${(err as Error).message}) domain=${domain}`);
     }
-    // Log the failure class only — never the address or upstream body.
-    const domain = value.email.split("@")[1] ?? "?";
-    console.error(`[waitlist] insert failed (${(err as Error).message}) domain=${domain}`);
-    return json(502, { ok: false, message: GENERIC_FAIL });
   }
+
+  if (stored === "exists") return json(200, { ok: true, status: "already" });
+
+  // 2) Email the team about the new signup (if configured).
+  let emailed = false;
+  if (notifyEnabled()) {
+    try {
+      await notifySignup(value);
+      emailed = true;
+    } catch (err) {
+      console.error(`[waitlist] notify email failed (${(err as Error).message})`);
+    }
+  }
+
+  // Success if the signup was saved or delivered by email.
+  if (stored === "created" || emailed) return json(201, { ok: true, status: "joined" });
+
+  if (stored === "skipped" && !notifyEnabled()) {
+    console.error("[waitlist] nothing configured: set RESEND_API_KEY and/or SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY");
+    return json(503, { ok: false, message: "The waitlist isn’t open just yet. Please try again soon." });
+  }
+  return json(502, { ok: false, message: GENERIC_FAIL });
 }
 
 export function GET() {

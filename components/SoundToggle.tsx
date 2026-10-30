@@ -33,7 +33,7 @@ export default function SoundToggle() {
       className="sound"
       data-on={on}
       aria-pressed={on}
-      aria-label={on ? "Turn ambient sound off" : "Turn ambient sound on"}
+      aria-label={on ? "Turn nature sound off" : "Turn nature sound on"}
       onClick={toggle}
     >
       <span className="sound__bars" aria-hidden>

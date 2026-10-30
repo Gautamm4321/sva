@@ -10,6 +10,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  devIndicators: false, // hide the Next.js "N" badge in dev
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
