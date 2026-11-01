@@ -112,11 +112,26 @@ export default function WaitlistForm({ turnstileSiteKey }: { turnstileSiteKey: s
             </>
           )}
         </p>
-        <p className="wl-done__body">
-          {status === "joined"
-            ? "We’ll write when the first svā rituals are ready. Until then — breathe."
-            : "This email is already on the waitlist, so there’s nothing more to do. We’ll be in touch."}
-        </p>
+        {status === "joined" ? (
+          <>
+            <p className="wl-done__body">We’re excited to welcome you to the svā community.</p>
+            <p className="wl-done__body">
+              We’re still making our first svā ritual, slowly and with care. We’ll reach out the moment it’s ready.
+            </p>
+            <p className="wl-done__body">Until then — breathe.</p>
+            <p className="wl-done__body wl-done__sign">
+              with care,
+              <br />
+              svā labs
+              <br />
+              <a href="mailto:info@svalabs.in">info@svalabs.in</a>
+            </p>
+          </>
+        ) : (
+          <p className="wl-done__body">
+            This email is already on the waitlist, so there’s nothing more to do. We’ll be in touch.
+          </p>
+        )}
       </div>
     );
   }

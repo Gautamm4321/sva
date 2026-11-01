@@ -792,7 +792,19 @@ button {
 }
 .wl-done__body {
   color: var(--ink-2);
-  max-width: 40ch;
+  max-width: 44ch;
+}
+.wl-done__body + .wl-done__body {
+  margin-top: 0.9em;
+}
+.wl-done__sign {
+  margin-top: 1.6em !important;
+  line-height: 1.6;
+}
+.wl-done__sign a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 .ts:empty {
   display: none;
